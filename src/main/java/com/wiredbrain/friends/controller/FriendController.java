@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.ValidationException;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -17,10 +18,16 @@ public class FriendController {
     FriendService friendService;
 
     @PostMapping("/friend")
-    Friend create(@RequestBody Friend friend){
-
+    Friend create(@RequestBody Friend friend) throws ValidationException {
+        if (friend.getId() == 0 && friend.getFirstName() != null && friend.getLastName() != null)
         return friendService.save(friend);
+        else  throw new ValidationException("friend can not be created");
+    }
 
+    //exception handling class
+    @ExceptionHandler(ValidationException.class)
+    ResponseEntity<String> exceptionHandler(ValidationException e){
+        return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 
@@ -28,13 +35,14 @@ public class FriendController {
     Iterable<Friend> read(){
         return friendService.findAll();
     }
+    //ResponseEntity enables you to handle errors
     @PutMapping("/friend")
     ResponseEntity<Friend> update(@RequestBody Friend friend){ //changed the return type to handle any error
         if (friendService.findById(friend.getId()).isPresent())
-            return  new ResponseEntity(friendService.save(friend), HttpStatus.OK);
+            return  new ResponseEntity(friend, HttpStatus.BAD_REQUEST);
          else
-        return  new ResponseEntity(friend, HttpStatus.BAD_REQUEST);
-         //if the friend does not exist it sends bad request and does not change the existing friend
+        return  new ResponseEntity(friendService.save(friend), HttpStatus.OK);
+         //if the friend does exists it sends bad request and does not change the existing friend
     }
 
     @DeleteMapping("/friend/{id}")
