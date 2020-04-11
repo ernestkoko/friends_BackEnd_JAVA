@@ -2,6 +2,7 @@ package com.wiredbrain.friends.controller;
 
 import com.wiredbrain.friends.model.Friend;
 import com.wiredbrain.friends.service.FriendService;
+import com.wiredbrain.friends.util.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,11 @@ public class FriendController {
         else  throw new ValidationException("friend can not be created");
     }
 
-    //exception handling class
+    //exception handling class now a custom class
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
-    ResponseEntity<String> exceptionHandler(ValidationException e){
-        return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+    ErrorMessage exceptionHandler(ValidationException e){
+        return new ErrorMessage("400", e.getMessage());
     }
 
 
