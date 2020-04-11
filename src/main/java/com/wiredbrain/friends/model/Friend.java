@@ -3,10 +3,7 @@ package com.wiredbrain.friends.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity  // this makes it a table
 public class Friend {
@@ -20,6 +17,17 @@ public class Friend {
     int age;
     @JsonIgnore
     boolean married;
+
+    @Embedded
+    Address address;  // we just embedded the Address class inside Friend class
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public int getAge() {
         return age;
