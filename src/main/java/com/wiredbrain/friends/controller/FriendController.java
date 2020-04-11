@@ -45,7 +45,14 @@ public class FriendController {
             @RequestParam(value = "first", required = false) String firstName,
             @RequestParam(value = "last", required = false) String lastName)
     {
-        return friendService.findByFirstNameAndLastName(firstName, lastName);
+        if (firstName != null && lastName != null) {
+            return friendService.findByFirstNameAndLastName(firstName, lastName);
+        }else if (firstName != null){
+            return friendService.findByFirstName(firstName);
+        }else if (lastName != null){
+            return friendService.findByLastName(lastName);
+        }
+        return friendService.findAll();
     }
 
 //    @GetMapping("/friend/search")
