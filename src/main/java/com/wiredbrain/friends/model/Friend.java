@@ -1,6 +1,7 @@
 package com.wiredbrain.friends.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -20,6 +21,10 @@ public class Friend {
     @JsonIgnore
     boolean married;
 
+    //Added @ManyToOne  and @JsonBackReference annotations to the instance of Friend and Address class and
+    // @JsonManagedReference annotation to Address instance in Friend class so we do not end in infinite loop in practice
+
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     List<Address> addresses;  // we just embedded the Address class inside Friend class
 
