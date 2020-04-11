@@ -25,12 +25,7 @@ public class FriendController {
         else  throw new ValidationException("friend can not be created");
     }
 
-    //exception handling class now a custom class
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ValidationException.class)
-    ErrorMessage exceptionHandler(ValidationException e){
-        return new ErrorMessage("400", e.getMessage());
-    }
+
 
 
     @GetMapping("/friend")
